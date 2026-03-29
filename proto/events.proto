@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package gotrack;
+
+option go_package = "github.com/gotrack/proto";
+
+service EventService {
+  rpc IngestEvents(IngestRequest) returns (IngestResponse);
+  rpc StreamEvents(stream EventInput) returns (IngestResponse);
+}
+
+message EventInput {
+  string source_id = 1;
+  string type = 2;
+  string payload = 3;
+  string timestamp = 4;
+}
+
+message IngestRequest {
+  repeated EventInput events = 1;
+  string api_key = 2;
+}
+
+message IngestResponse {
+  int32 accepted = 1;
+  int32 rejected = 2;
+  int32 duplicates = 3;
+  repeated string rejected_ids = 4;
+}
